@@ -1,12 +1,19 @@
 # coding:utf-8
 
+
 import os
 import sys
 import re
 
 import sixpad as sp
+from sixpad import msg
+from sixpad import window as win
 
 # Constant
+# Plugin path
+
+PLUGINPATH= sp.appdir + '\\plugins\\markpad\\'
+
 ## itemType
 HEAD = 0
 HEAD1 = 1
@@ -25,15 +32,21 @@ LIST3 = 13
 LIST4 = 14
 
 # text IHM
+for lang in(sp.locale, 'english'):
+    langFile = os.path.join(PLUGINPATH, lang + '.lng')
+    if os.path.isfile(langFile) :
+        print("Lang file found : %s" % langFile)
+        sp.loadTranslation(langFile)
+
 textFR={
 'goto': 'Déplacement',
 'nextHead': 'Allé au titre suivant'
 } # end dico
 
 # shortkeys
-shortkey={
-'Goto.nextHead': ['CTRL+H', None],
-'Goto.nextHead1': ['CTRL+1', None]
+shortkey ={
+'nextHead': ['CTRL+H', None],
+'nextHead1': ['CTRL+1', None]
 } # end shortkey dico
 
 # shortcut programme #
@@ -53,68 +66,78 @@ def test():
     return
 # end def
 
+def getAccelerator(action):
+    return shortkey[action][0]
+# end def
+
 class Goto(object):
     """Functions to go to item"""
 
-    def nexItem(itemType):
-        """Go to the next item
-        itemType: int
-        return true if item found or false if not.
-        """
-        
-        # Get current line
-        line = sp.window.curPage.curLine
-        # test each line
-        while line < page.lineCount():
-            line += 1
-            # test this line with regex
-            if regexCompiled[itemType].match(page.line(line)):
-                # regex found item, go to this line
-                page.curLine = line
-                # say this line heading 
-                sayText(getLineHeading(page.curLine), True)
-                return True
-            # end if
-        # end while
-        # Item not found, bip and return False
-        sp.window.messageBeep(0)
-        return False
-    # end def
+def nextItem(itemType):
+    """Go to the next item
+    itemType: int
+    return true if item found or false if not.
+    """
+    
+    # Get current line
+    line = sp.window.curPage.curLine
+    # test each line
+    while line < page.lineCount:
+        lineText = page.line(line)
+        line += 1
+        # test this line with regex
+        if regexCompiled[itemType].match(lineText):
+            # regex found item, go to this line
+            page.curLine = line
+            # say this line heading 
+            sp.say(page.curLineText, True)
+            return True
+        # end if
+    # end while
+    # Item not found, bip and return False
+    sp.window.messageBeep(0)
+    return False
+# end def
 # end class
 
-def loadMarkPad():
-    """Load MakPad module if it didn't already""" 
-    # Test if the menu MarkUp is not already created 
-    if sp.window.menus["markUp"] == None:
-        # Load MarkPad module
-        # Compile regex
-        regexCompiled = compileRegex(regex)
-        # Creating MarkUp menu 
-        menuMarkUp = sp.window.menus.add(label = "MarkUp", action = None, index = -3, submenu = True, name = 'markUp')
-        # sub menu
-        creatSubMenu()
-        # Accelerator
-        AcceleratorActive = creatAccelerator()
-    # end if
-# end def
+def loadModule(markUpType):
+    """Load MarkPad module"""
+    # Compile regex
+    # fetch regex for markUp language
+    regex=getRegex(markUpType)
+    regexCompiled = compileRegex(regex)
+    # Creating MarkUp menu 
+    menuMarkUp = win.menus.add(label = "MarkUp", action = None, index = -2, submenu = True, name = 'markUp')
+    # creat sub menu and global subMenus and items
+    subMenus, items = creatSubMenu(menuMarkUp)
+    # Accelerator
+    #AcceleratorActive = creatAccelerator(shortkey, win)
+    return regexCompiled, menuMarkUp, subMenus, items
 
 def creatSubMenu(menuMarkUp):
-    # template
-    #menu = menuMarkUp.add(label = "", submenu = True, action = None, name = "")
+    """Creat sub menu and item for MarkPad module
+    arg : menuMatkUp, 6pad menu type
+    return subMenus dico, items dico"""
     
+    subMenus = {}
+    items = {}
+    
+    # Sub Menu
     # Goto
-    menuGoto = menuMarkUp.add(
-    label = text['menuGoto'], submenu = True, action = None, name = 'goto')
-    # Goto sub menu
+    subMenus['goto'] = menuMarkUp.add(
+    label = msg('Goto'), submenu = True, action = None, name = 'goto')
+    # items in Goto sub menu
     # nextHead
-    menuNextHead = menuMarkUp.add(
-    label = text['nextHead'], submenu = False, function = Goto.nextItem(HEAD), name = "nextHead")
+    items['nextHead'] = subMenus['goto'].add(
+    label = msg('Next head'), action = lambda:nextItem(HEAD), accelerator = getAccelerator('nextHead'), name = "nextHead")
 
         # test
-    menuTest = menuMarkUp.add(label = "Lancer le test", submenu = False, action = test, name = "test")
+    subMenus['test'] = menuMarkUp.add(label = "Lancer le test", submenu = False, action = test, name = "test")
+    
+    return subMenus, items
 # end def
 
-def creatAccelerator(shortkey):
+def creatAccelerator(shortkey, win):
      """ Create accelerators from shorkey dico and return AcceleratorActive"""
 
      AcceleratorActive = {}
@@ -127,11 +150,14 @@ def creatAccelerator(shortkey):
              # Default shortkey used
              key = value[0]
          # end if
-         AcceleratorActive[action] = sp.window.addAccelerator(key, eval(action), True)
+         AcceleratorActive[action] = win.addAccelerator(key, eval(action), True)
      # end for
      return AcceleratorActive
 # end def
  
+def getRegex(markUpType):
+    return regex
+
 def compileRegex(regex):
      # creating dico for compiled regex
      regexCompiled = {}
@@ -141,16 +167,12 @@ def compileRegex(regex):
      return regexCompiled
 # end def
 
-
-if __name__ == "__main__":
-    # Store accelerators into dictionary
-    global AcceleratorActive
-    # Dictionary to store compiled regex
-    global regexCompiled
-    # Store markup menu into dictionary
-    global menuMarkUp
-    
-    loadMarkPad()
-    sp.say("fin du script", True)
+## main ##
+# Load MarkPad module if it didn't already""" 
+# Test if the menu MarkUp is not already created 
+if True :#OR sp.window.menus["markUp"] == None :
+    regexCompiled, menuMarkUp, subMenus, items = loadModule("markdown")
+    print('MarkPad load')
+    # end if
 else:
-    print("not main")
+    print("Menu already created")
