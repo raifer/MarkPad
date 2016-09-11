@@ -29,7 +29,9 @@ for lang in(sp.locale, 'english'):
 # shortkeys
 shortkey ={
 'next_head': ['CTRL+R', None],
-'next_head1': ['CTRL+1', None]
+'next_head1': ['CTRL+1', None],
+'previous_head':['CTRL+SHIFT+R', None],
+'previous_head1': ['CTRL+SHIFT+1', None]
 } # end shortkey dico
 
 # shortcut programme #
@@ -76,10 +78,12 @@ def creat_submenu(menu_markup):
     submenus['goto'] = menu_markup.add(
     label = msg('Goto'), submenu = True, action = None, name = 'goto')
     # items in Goto sub menu
-    # next_head
+    # next head
     items['next_head'] = submenus['goto'].add(
     label = msg('Next head'), action = lambda:goto.next_item(HEAD), accelerator = get_accelerator('next_head'), name = "next_head")
-
+# Previous head
+    items['previous_head'] = submenus['goto'].add(
+    label = msg('Previous head'), action = lambda:goto.previous_item(HEAD), accelerator = get_accelerator('previous_head'), name = "previous_head")
         # test
     submenus['test'] = menu_markup.add(label = "Lancer le test", submenu = False, action = test, name = "test")
     
