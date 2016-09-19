@@ -6,25 +6,15 @@ import re
 
 import sixpad as sp
 from sixpad import msg
-from sixpad import window as win
+from sixpad import window as win
 
 # Plugin path
 PLUGIN_PATH = sp.appdir + '\\plugins\\markpad\\'
-sys.path.append(PLUGIN_PATH)
+sys.path.append(PLUGIN_PATH)
 
 import goto_regex
 import regex
-from item import *
-
-# Constant
-# text IHM
-for lang in(sp.locale, 'english'):
-    langFile = os.path.join(PLUGIN_PATH, lang + '.lng')
-    if os.path.isfile(langFile) :
-        print("Lang file found : %s" % langFile)
-        sp.loadTranslation(langFile)
-    # end if
-# end for
+from item import 
 
 # shortkeys
 shortkey ={
@@ -40,7 +30,7 @@ page = sp.window.curPage
 def test():
     sp.say("test ok", True)
     return
-# end def
+# end de
 
 def get_accelerator(action):
     return shortkey[action][0]
@@ -48,6 +38,8 @@ def get_accelerator(action):
 
 def load_module(markup_type):
     """Load MarkPad module"""
+    # Load lng file to translate markpad
+    load_translate_file()
     # Compile regex
     # fetch regex for markup language
     regex_raw = regex.get_regex(markup_type)
@@ -63,7 +55,7 @@ def load_module(markup_type):
     # Accelerator
     #accelerator_active = creatAccelerator(shortkey, win)
     return goto, menu_markup, submenus, items
-# end def
+# end de
 
 def creat_submenu(menu_markup):
     """Creat sub menu and item for MarkPad module
@@ -88,7 +80,7 @@ def creat_submenu(menu_markup):
     submenus['test'] = menu_markup.add(label = "Lancer le test", submenu = False, action = test, name = "test")
     
     return submenus, items
-# end def
+# end de
 
 def creat_accelerator(shortkey, win):
      """ Create accelerators from shorkey dico and return accelerator_active"""
@@ -107,10 +99,21 @@ def creat_accelerator(shortkey, win):
      # end for
      return accelerator_active
 # end def
- 
+ 
 
+def load_translate_file():
+    """Load the lang file to translate markpad"""
+    # Load language
+    for lang in(sp.locale, 'english'):
+        lang_file = os.path.join(PLUGIN_PATH, lang + '.lng')
+        if os.path.isfile(lang_file) :
+            # Lang file found
+            sp.loadTranslation(lang_file)
+    # end for
+# end def
+        
+        ## main ##
 
-## main ##
 # Load MarkPad module if it didn't already""" 
 # Test if the menu MarkUp is not already created 
 if True : #OR sp.window.menus["markup"] == None :
