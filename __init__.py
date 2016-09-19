@@ -14,7 +14,7 @@ sys.path.append(PLUGIN_PATH)
 
 import goto_regex
 import regex
-from item import 
+from item import *
 
 # shortkeys
 shortkey ={
@@ -26,11 +26,6 @@ shortkey ={
 
 # shortcut programme #
 page = sp.window.curPage
-
-def test():
-    sp.say("test ok", True)
-    return
-# end de
 
 def get_accelerator(action):
     return shortkey[action][0]
@@ -76,11 +71,9 @@ def creat_submenu(menu_markup):
 # Previous head
     items['previous_head'] = submenus['goto'].add(
     label = msg('Previous head'), action = lambda:goto.previous_item(HEAD), accelerator = get_accelerator('previous_head'), name = "previous_head")
-        # test
-    submenus['test'] = menu_markup.add(label = "Lancer le test", submenu = False, action = test, name = "test")
     
     return submenus, items
-# end de
+# end def
 
 def creat_accelerator(shortkey, win):
      """ Create accelerators from shorkey dico and return accelerator_active"""
