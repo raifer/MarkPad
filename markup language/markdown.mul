@@ -1,0 +1,13 @@
+# coding: utf8
+# MarkDown definition
+# associated Extensions 
+ extension='markdown', 'md', 'txt'
+# Regex to find Markup item
+# syntax : 
+# NAME_OF_ITEM='regex'
+
+HEAD='^#+ '
+HEAD1='^# '
+HEAD2='^## '
+HEAD3='^### '
+HEAD4='^#### '

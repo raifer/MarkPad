@@ -1,5 +1,10 @@
 # Todo list for Version 1
 
+## markup language file
+
+* message for syntax error
+## others 
+
 - Shortkey for head one and followings; 
 - What is the current section.
 
