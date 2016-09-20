@@ -41,9 +41,9 @@ def load_module(markup_type):
     regex_compiled = regex.compile_regex(regex_raw)
     # instantiates goto with regex compiled
     goto = goto_regex.Goto(sp, regex_compiled)
-    # Creating MarkUp menu 
     
-    menu_markup = win.menus.add(label = "MarkUp", action = None, index = -2, submenu = True, name = 'markup')
+    # Creating MarkUp menu
+    menu_markup = win.menus.add(label = "MarkUp", action = None, index = -2, submenu = True, name = 'markup', specific = True)
     # creat sub menu and global submenus and items
     submenus, items = creat_submenu(menu_markup)
     # Accelerator
