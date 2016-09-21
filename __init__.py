@@ -25,7 +25,7 @@ shortkey ={
 } # end shortkey dico
 
 # shortcut programme #
-page = sp.window.curPage
+curPage= sp.window.curPage
 
 def get_accelerator(action):
     return shortkey[action][0]
@@ -87,10 +87,14 @@ def creat_accelerator(shortkey, win):
          else:
              # Default shortkey used
              key = value[0]
+         # end if
          # end i
          accelerator_active[action] = win.addAccelerator(key, eval(action), True)
+     # end for
      # end fo
      return accelerator_active
+# end def
+
 # end de
  
 
@@ -102,6 +106,7 @@ def load_translate_file():
         if os.path.isfile(lang_file) :
             # Lang file found
             sp.loadTranslation(lang_file)
+        # end if
     # end for
 # end def
 
@@ -110,9 +115,11 @@ class MARKUP_LANGUAGE(dict):
     def __init__(self, plugin_path):
         """Load markdown language definition"""
         # Load markup language definition from language directory
-        self.markup_langs = self._fetch_markup_definition(plugin_path)
+        self.markup_languages = self._fetch_markup_definition(plugin_path)
+        # Extract extensions capability from each markup language
+        self.caps = self._extract_capabilitys(self.markup_languages)
     # end def
-    
+
     def _fetch_markup_definition(self, plugin_path):
         """Create MUL file dictionary from file present into "markup language" directory"""
         
@@ -131,9 +138,11 @@ class MARKUP_LANGUAGE(dict):
                 mul_path = os.path.join(lang_path, file_name)
                 # Add this markup language into markup definition dictionary
                 markup_langs[lang_name] = self._parse_mul_file(mul_path)
+                # Add item name into markup language definition
+                markup_langs[lang_name]['name'] = lang_name
                 
-            # end if mul file found
-        # end for file
+            # end if # mul file found
+        # end for # file
         return markup_langs
     # end def
     
@@ -166,20 +175,61 @@ class MARKUP_LANGUAGE(dict):
                     # Regex definition
                     value = eval(value)
                     key = eval(key)
+                # end if
             except ValueError : 
                 print('Error during MarkPad load Markup language definition\nFile : %s\nSyntaxe error at line %d\n%s' %(mul_path, n_line, line))
                 return -1
+            # end try
             # end except
             markup_lang[key] = value
         # end for
         mul_file.close()
         return markup_lang
     # end def
+    
+    def _extract_capabilitys(self, markup_languages):
+        """From markup languages dico, return capability dictionary
+        
+        @ markup_languages, dictionary containing mul dico;
+        return capability, dictionary. [ext]:"markup language name"
+        """
+            
+        # Instanciate capability dictionary
+        caps = {}
+        # Extract extension from each language
+        for mul in markup_languages.values():
+            # Test Verify extension definition.
+            if not 'extension' in mul:
+                print('Warning, no "extension" definition found in "%s" markup language' % mul['name'])
+                # next language
+                continue
+            # end if
+            # explore each extension and add it in the capability dictionary with its language
+            for ext in mul['extension']:
+                caps[ext] = mul['name']
+            # end for # , ext
+        # end for # , mul
+        return caps
+    # end def
+    
 # end class
+
+def page_opened(page):
+    # fetch extension of this new page
+    ext = os.path.splitext(page.file)[1][1:].lower()
+    if not ext:
+        print('No extension')
+    else:
+        print(ext)
+    # end if
+# end def
 
 ## main ##
 # dev
 m = MARKUP_LANGUAGE(PLUGIN_PATH)
+
+win.addEvent('pageOpened', page_opened)
+
 # Load MarkPad module if it didn't already""" 
 # Test if the menu MarkUp is not already created 
 if True : #OR sp.window.menus["markup"] == None :
