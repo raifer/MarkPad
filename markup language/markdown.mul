@@ -1,7 +1,7 @@
 # coding: utf8
 # MarkDown definition
 # associated Extensions 
- extension='markdown', 'md', 'txt'
+extension='markdown', 'md', 'txt'
 # Regex to find Markup item
 # syntax : 
 # NAME_OF_ITEM='regex'
