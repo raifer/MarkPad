@@ -110,8 +110,13 @@ def load_translate_file():
     # end for
 # end def
 
-class MARKUP_LANGUAGE(dict):
-
+class MarkupManager():
+    """Manage markup language
+    @ plugin_path : Module path to scan MUL file into markup language directory
+    * Scan MUL File
+    * Exctract capabilities into caps dictionary
+    * Generate MUL instance from extension"""
+    
     def __init__(self, plugin_path):
         """Load markdown language definition"""
         # Load markup language definition from language directory
@@ -134,25 +139,21 @@ class MARKUP_LANGUAGE(dict):
             if '.mul' in file_name[-4:]:
                 # mul file found.
                 # fetch language name
-                lang_name = file_name[:-4]
+                mul_name = file_name[:-4]
                 mul_path = os.path.join(lang_path, file_name)
                 # Add this markup language into markup definition dictionary
-                markup_langs[lang_name] = self._parse_mul_file(mul_path)
-                # Add item name into markup language definition
-                markup_langs[lang_name]['name'] = lang_name
-                
+                markup_langs[mul_name] = self._parse_mul_file(mul_name, mul_path)
             # end if # mul file found
         # end for # file
         return markup_langs
     # end def
     
-    def _parse_mul_file(self, mul_path):
-        """Parse mul file and return dictionary language definition""" 
+    def _parse_mul_file(self, mul_name, mul_path):
+        """Parse mul file and return MarkupLanguage definition""" 
         # Open file.
         mul_file = open(mul_path, encoding='utf8')
-                        # parse file
-        # Instanciate markup_lang dictionary
-        markup_lang = {}
+        # Instanciate MarkupLanguage class
+        mul = MarkupManager.MarkupLanguage(mul_name, mul_path)
         # Parse file line by line
         n_line = 0
         for line in mul_file:
@@ -167,24 +168,28 @@ class MARKUP_LANGUAGE(dict):
             # extract key and value
             try :
                 key, value = line.split('=')
-                # extension information or regex definition?
-                if 'extension' in line :
-                    key = 'extension'
-                    value = eval(value)
+                value = eval(value)
+                # find key type, extension, help or regex
+                if 'extension' in key:
+                    # Value is a list of extension compatible
+                    mul.extension = value
+                elif 'help' in key:
+                    mul.help = value
                 else:
                     # Regex definition
-                    value = eval(value)
+                    # Convert item type 
                     key = eval(key)
+                    mul[key] = value
                 # end if
             except ValueError : 
                 print('Error during MarkPad load Markup language definition\nFile : %s\nSyntaxe error at line %d\n%s' %(mul_path, n_line, line))
                 return -1
             # end try
             # end except
-            markup_lang[key] = value
+            
         # end for
         mul_file.close()
-        return markup_lang
+        return mul
     # end def
     
     def _extract_capabilitys(self, markup_languages):
@@ -193,25 +198,32 @@ class MARKUP_LANGUAGE(dict):
         @ markup_languages, dictionary containing mul dico;
         return capability, dictionary. [ext]:"markup language name"
         """
-            
+        
         # Instanciate capability dictionary
         caps = {}
         # Extract extension from each language
         for mul in markup_languages.values():
             # Test Verify extension definition.
-            if not 'extension' in mul:
-                print('Warning, no "extension" definition found in "%s" markup language' % mul['name'])
+            if not mul.extension:
+                print('Warning, no "extension" definition found in "%s" markup language' % mul.name)
                 # next language
                 continue
             # end if
             # explore each extension and add it in the capability dictionary with its language
-            for ext in mul['extension']:
-                caps[ext] = mul['name']
+            for ext in mul.extension:
+                caps[ext] = mul.name
             # end for # , ext
         # end for # , mul
         return caps
     # end def
     
+    class MarkupLanguage(dict):
+        def __init__(self, name, path):
+            self.name = name
+            self.path = path
+            self.help = None
+            self.extension = None
+        # end def
 # end class
 
 def page_opened(page):
@@ -226,7 +238,7 @@ def page_opened(page):
 
 ## main ##
 # dev
-m = MARKUP_LANGUAGE(PLUGIN_PATH)
+m = MarkupManager(PLUGIN_PATH)
 
 win.addEvent('pageOpened', page_opened)
 
