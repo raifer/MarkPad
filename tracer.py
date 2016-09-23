@@ -12,6 +12,8 @@ class Tracer(object):
     
     def __init__(self, log_path):
         self.log_file = open(log_path, mode = 'w', buffering = 1, encoding = 'utf8')        
+        self.last_is_head = True
+        self.is_first_line = True
     # end def
     
     def __del__(self):
@@ -26,28 +28,46 @@ class Tracer(object):
     
     def print(self, s):
         """print(s) --> None, write string s in log file"""
+        
         self.log_file.write(s + '\n')
+        self.last_is_head = False
     # end def
     
     def h1(self, s):
         """h1(s) --> None,
         write string s surrounded by one "#".
-        This is a level 1 header in markdown language""" 
-        self.print('# ' + s + ' #')
+        This is a level 1 header in markdown language"""
+        
+        # If is not the first line, add blank line between text and head
+        if not self.is_first_line:
+            self.print('')
+        else:
+            self.is_first_line = False
+        self.log_file.write('# ' + s + ' #\n')
+        self.last_is_head = True
     # end def
     
     def h2(self, s):
         """h2(s) --> None,
         write string s surrounded by two "#".
-        This is the second level header in markdown language""" 
-        self.print('## ' + s + ' ##')
+        This is the second level header in markdown language"""
+        
+        if not self.last_is_head:
+            # Add blank line between text and this header.
+            self.print('')
+        self.log_file.write('## ' + s + ' ##\n')
+        self.last_is_head = True
     # end def
     
     def h3(self, s):
         """h3(s) --> None,
         write string s surrounded by three "#".
         This is the third level header in markdown language""" 
-        self.print('### ' + s + ' ###')
+        
+        if not self.last_is_head:
+            self.print('')
+        self.log_file.write('### ' + s + ' ###\n')
+        self.last_is_head = True
     # end def
     
     def print_time(self):
