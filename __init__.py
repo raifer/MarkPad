@@ -8,13 +8,9 @@ import sixpad as sp
 from sixpad import msg
 from sixpad import window as win
 
-# Plugin path
-PLUGIN_PATH = sp.appdir + '\\plugins\\markpad\\'
-sys.path.append(PLUGIN_PATH)
-
-import goto_regex
-import regex
-from item import *
+from . import goto_regex
+from .item import *
+from . import tracer
 
 # shortkeys
 shortkey ={
@@ -31,16 +27,8 @@ def get_accelerator(action):
     return shortkey[action][0]
 # end def
 
-def load_module(markup_type):
+def load_markpad(mul):
     """Load MarkPad module"""
-    # Load lng file to translate markpad
-    load_translate_file()
-    # Compile regex
-    # fetch regex for markup language
-    regex_raw = regex.get_regex(markup_type)
-    regex_compiled = regex.compile_regex(regex_raw)
-    # instantiates goto with regex compiled
-    goto = goto_regex.Goto(sp, regex_compiled)
     
     # Creating MarkUp menu
     menu_markup = win.menus.add(label = "MarkUp", action = None, index = -2, submenu = True, name = 'markup', specific = True)
@@ -48,14 +36,13 @@ def load_module(markup_type):
     submenus, items = creat_submenu(menu_markup)
     # Accelerator
     #accelerator_active = creatAccelerator(shortkey, win)
-    return goto, menu_markup, submenus, items
+    return menu_markup, submenus, items
 # end def
 
 def creat_submenu(menu_markup):
     """Creat sub menu and item for MarkPad modul
     arg : menu_markup, 6pad menu typ
-    ret
-    urn submenus dico, items dico"""
+    return submenus dico, items dico"""
     
     submenus = {}
     items = {}
@@ -76,27 +63,24 @@ def creat_submenu(menu_markup):
 # end def
 
 def creat_accelerator(shortkey, win):
-     """ Create accelerators from shorkey dico and return accelerator_active"""
+    """ Create accelerators from shorkey dico and return accelerator_active"""
 
-     accelerator_active = {}
-     for action, value in shortkey.items():
-         # test if user set personal key for this action
-         if value[1]:
-             # User shortkey found
-             key = value[1]
-         else:
-             # Default shortkey used
-             key = value[0]
-         # end if
-         # end i
-         accelerator_active[action] = win.addAccelerator(key, eval(action), True)
-     # end for
-     # end fo
-     return accelerator_active
+    accelerator_active = {}
+    for action, value in shortkey.items():
+        # test if user set personal key for this action
+        if value[1]:
+            # User shortkey found
+            key = value[1]
+        else:
+            # Default shortkey used
+            key = value[0]
+        # end if
+        # end i
+        accelerator_active[action] = win.addAccelerator(key, eval(action), True)
+    # end for
+    # end fo
+    return accelerator_active
 # end def
-
-# end de
- 
 
 def load_translate_file():
     """Load the lang file to translate markpad"""
@@ -223,30 +207,56 @@ class MarkupManager():
             self.path = path
             self.help = None
             self.extension = None
+            self._compiled = False
         # end def
-# end class
+        
+        def compile_regex(self):
+            if self._compiled:
+                # Regex already compiled
+                return
+            # end if
+            # Compile regex
+            for item_type, regex_raw in self.items():
+                mul[item_type] = re.compile(regex_raw, re.MULTILINE)
+            # end for
+            self._compiled = True
+        # end def
+        
+        def create_goto_fonction(self):
+            self.goto = goto_regex.Goto(sp, self)
+        # end def
+    # end class MarkupLanguage
+# end class MarkupManager
 
 def page_opened(page):
     # fetch extension of this new page
     ext = os.path.splitext(page.file)[1][1:].lower()
     if not ext:
-        print('No extension')
-    else:
-        print(ext)
-    # end if
+        ext = 'noext'
+    # Search language for this extension
+    if ext in markup_manager.caps.key:
+        # MUL available for this extension
+        mul_name = mul.caps[ext]
+        # Load MarkupLanguage 
+        page.mul = markup_manager.markup_languages[mul_name]
+        page.mul.goto, menu_markup, submenus, items = load_module("markdown")
 # end def
 
 ## main ##
-# dev
-m = MarkupManager(PLUGIN_PATH)
+# Init log systeme
+log_file_path = os.path.join(PLUGIN_PATH, 'log_markpad.md')
+log = tracer.Tracer(log_file_path)
+log.h1('MarkPad log')
+log.print_time()
+
+# Load lng file to translate markpad
+load_translate_file()
+
+# Init Markup Manager.
+# Scan MUL files to find languages and extract compatible extension list.
+markup_m = MarkupManager(PLUGIN_PATH)
 
 win.addEvent('pageOpened', page_opened)
 
-# Load MarkPad module if it didn't already""" 
-# Test if the menu MarkUp is not already created 
-if True : #OR sp.window.menus["markup"] == None :
-    goto, menu_markup, submenus, items = load_module("markdown")
-    print('MarkPad load')
-else:
-    print('Menu already created')
-# end if
+#menu_markup, submenus, items = load_markpad("markdown")
+print("fin du main")

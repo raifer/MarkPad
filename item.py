@@ -1,6 +1,11 @@
 # coding:utf-8
 """constants to define item type"""
 
+from sixpad import appdir 
+
+## Plugin Path
+PLUGIN_PATH = appdir + '\\plugins\\markpad\\'
+
 ## itemType
 HEAD = 0
 HEAD1 = 1
