@@ -26,7 +26,16 @@ shortkey ={
 curPage= sp.window.curPage
 
 def get_accelerator(action):
-    return shortkey[action][0]
+    value = shortkey[action]
+    # test if user set personal key for this action
+    if value[1]:
+        # User shortkey found
+        key = value[1]
+    else:
+        # Default shortkey used
+        key = value[0]
+    # end if
+    return key
 # end def
 
 def load_markpad(page):
@@ -44,7 +53,7 @@ def load_markpad(page):
     log('creat sub menu and global submenus and items')
     submenus, items = creat_submenu(menu_markup, page.mul.goto)
     # Accelerator
-    #accelerator_active = creatAccelerator(shortkey, win)
+    accelerator_active = creat_accelerator(page.mul.goto)
     return menu_markup, submenus, items
 # end def
 
@@ -76,23 +85,17 @@ def creat_submenu(menu_markup, goto):
     return submenus, items
 # end def
 
-def creat_accelerator(shortkey, win):
+def creat_accelerator(goto):
     """ Create accelerators from shorkey dico and return accelerator_active"""
-
+    
     accelerator_active = {}
-    for action, value in shortkey.items():
-        # test if user set personal key for this action
-        if value[1]:
-            # User shortkey found
-            key = value[1]
-        else:
-            # Default shortkey used
-            key = value[0]
-        # end if
-        # end i
-        accelerator_active[action] = win.addAccelerator(key, eval(action), True)
-    # end for
-    # end fo
+    # Goto
+    # Next level 1 heading.
+    accelerator_active['next_head2'] = win.addAccelerator(
+        get_accelerator('next_head2'), lambda:goto.next_item(HEAD2), False)
+    # Previous level 1 heading.
+    accelerator_active['previous_head2'] = win.addAccelerator(
+        get_accelerator('previous_head2'), lambda:goto.previous_item(HEAD2), True)
     return accelerator_active
 # end def
 
