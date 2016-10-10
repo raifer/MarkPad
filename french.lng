@@ -2,3 +2,5 @@
 Goto=Déplacement
 Next head=Titre de niveau suivant
 Previous head=Titre de niveau précédent
+Previous level 1 heading=Titre de premier niveau précédent
+Next level 1 heading=Titre de premier niveau suivant

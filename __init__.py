@@ -15,9 +15,11 @@ from . import tracer
 # shortkeys
 shortkey ={
 'next_head': ['CTRL+R', None],
-'next_head1': ['CTRL+1', None],
 'previous_head':['CTRL+SHIFT+R', None],
-'previous_head1': ['CTRL+SHIFT+1', None]
+'next_head1': ['CTRL+&', None],
+'previous_head1': ['CTRL+SHIFT+&', None],
+'next_head2': ['CTRL+é', None],
+'previous_head2': ['CTRL+SHIFT+é', None]
 } # end shortkey dico
 
 # shortcut programme #
@@ -57,15 +59,20 @@ def creat_submenu(menu_markup, goto):
     # Sub Menu
     # Goto
     submenus['goto'] = menu_markup.add(
-    label = msg('Goto'), submenu = True, action = None, name = 'goto')
+        label = msg('Goto'), submenu = True, action = None, name = 'goto')
     # items in Goto sub menu
     # next head
     items['next_head'] = submenus['goto'].add(
-    label = msg('Next head'), action = lambda: goto.next_item(HEAD), accelerator = get_accelerator('next_head'), name = "next_head")
-# Previous head
+        label = msg('Next head'), action = lambda: goto.next_item(HEAD), accelerator = get_accelerator('next_head'), name = "next_head")
+    # Previous head
     items['previous_head'] = submenus['goto'].add(
-    label = msg('Previous head'), action = lambda:goto.previous_item(HEAD), accelerator = get_accelerator('previous_head'), name = "previous_head")
-    
+        label = msg('Previous head'), action = lambda:goto.previous_item(HEAD), accelerator = get_accelerator('previous_head'), name = "previous_head")
+    # next head 1
+    items['next_head1'] = submenus['goto'].add(
+        label = msg('Next level 1 heading'), action = lambda: goto.next_item(HEAD1), accelerator = get_accelerator('next_head1'), name = "next_head1")
+    # Previous head 1
+    items['previous_head1'] = submenus['goto'].add(
+        label = msg('Previous level 1 heading'), action = lambda:goto.previous_item(HEAD1), accelerator = get_accelerator('previous_head1'), name = "previous_head1")
     return submenus, items
 # end def
 
