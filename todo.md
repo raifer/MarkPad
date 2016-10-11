@@ -3,10 +3,18 @@
 ## markup language file
 
 * message for syntax error
+* try when item_type does not exist : key = eval(key)
+
+## bugs
+### 6pad bug with specific set to True
+
+- submenu heading one and two
+- accelerator heading level 3
+
 ## others 
 
-- Shortkey for head one and followings; 
 - What is the current section.
+- heading tree
 
 # Version 2 #
 
