@@ -31,7 +31,9 @@ def get_shortkey(action):
         'next_head4': ["CTRL+'", None],
         'previous_head4': ["CTRL+SHIFT+'", None],
         'next_head5': ['CTRL+(', None],
-        'previous_head5': ['CTRL+SHIFT+(', None]
+        'previous_head5': ['CTRL+SHIFT+(', None],
+        'next_link': ['CTRL+k', None],
+        'previous_link': ['CTRL+SHIFT+k', None]
     } # end shortkey dico
     
     value = shortkey[action]
@@ -90,6 +92,12 @@ def creat_submenu(menu_markup, goto):
     # Previous head 1
     items['previous_head1'] = submenus['goto'].add(
         label = msg('Previous level 1 heading'), action = lambda:goto.previous_item(HEAD1), accelerator = get_shortkey('previous_head1'), name = "previous_head1")
+    # next link
+    items['next_link'] = submenus['goto'].add(
+        label = msg('Next link'), action = lambda: goto.next_item(LINK), accelerator = get_shortkey('next_link'), name = "next_link")
+    # Previous link
+    items['previous_link'] = submenus['goto'].add(
+        label = msg('Previous link'), action = lambda:goto.previous_item(LINK), accelerator = get_shortkey('previous_link'), name = "previous_link")
     return submenus, items
 # end def
 
