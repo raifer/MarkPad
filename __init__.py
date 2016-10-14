@@ -63,6 +63,7 @@ def load_markpad(page):
     log('creat sub menu and global submenus and items')
     submenus, items = creat_submenu(menu_markup, page.mul.goto)
     # Accelerator
+    log('creat accelerators')
     accelerator_active = creat_accelerator(page.mul.goto)
     return menu_markup, submenus, items
 # end def
