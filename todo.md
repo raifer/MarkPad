@@ -1,10 +1,5 @@
 # Todo list for Version 1
 
-## markup language file
-
-* message for syntax error
-* try when item_type does not exist : key = eval(key)
-
 ## bugs
 ### 6pad bug with specific set to True
 

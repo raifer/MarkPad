@@ -232,10 +232,15 @@ class MarkupManager():
                     # Regex definition
                     log('%s, regex : "%s"' %(key, value))
                     # Convert item type 
-                    key = eval(key)
-                    mul[key] = value
+                    try : 
+                        key = eval(key)
+                        mul[key] = value
+                    except NameError :
+                        win.warning('Parsing MUL file error.\nFile : "%s"\nRrror at line %d :\n%s\nItem type "%s" does not exist.\nThis item will be ignored.' %(mul_path, n_line, line, key), 'Markpad Error')
+                        log('Warning at line %d : Item type %s does not exist. Item ignored' %( n_line, key))
+                    # end try
                 # end if
-            except ValueError : 
+            except ValueError and SyntaxError : 
                 win.warning('Parsing MUL file error.\nFile : "%s"\nSyntaxe error at line %d\n%s' %(mul_path, n_line, line), 'Markpad Error')
                 log('Error at line %d : %s' %( n_line, line))
                 return None
