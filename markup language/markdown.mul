@@ -1,8 +1,14 @@
 # coding: utf8
-# MarkDown definition
-# associated Extensions 
+
+# MarkDown language definition
+# Author : Mathieu Barbe, mat.barbe@gmail.com
+
+## associated Extensions 
+# Note : To use MarkPad and this language with both "File not saved" and file without extension, append the special extension, "noext" .
 extension='markdown', 'md', 'txt'
-# Regex to find Markup item
+
+## Regex section
+# Used to find Markup item
 # syntax : 
 # NAME_OF_ITEM='regex'
 
