@@ -58,7 +58,7 @@ def load_markpad(page):
     page.mul.generate_goto_functions()
     # Creating MarkUp menu
     log('Create MarkPad menu')
-    menu_markup = win.menus.add(label = "MarkPad", action = None, index = -2, submenu = True, name = 'markpad', specific = False)
+    menu_markup = win.menus.add(label = "MarkPad", action = None, index = -2, submenu = True, name = 'markpad', specific = True)
     # creat sub menu and global submenus and items
     log('creat sub menu and global submenus and items')
     submenus, items = creat_submenu(menu_markup, page.mul.goto)
@@ -109,10 +109,10 @@ def creat_accelerator(goto):
     # Goto
     # Next level 2 heading.
     accelerator_active['next_head2'] = win.addAccelerator(
-        get_shortkey('next_head2'), lambda:goto.next_item(HEAD2), False)
+        get_shortkey('next_head2'), lambda:goto.next_item(HEAD2), True)
     # Previous level 2 heading.
     accelerator_active['previous_head2'] = win.addAccelerator(
-        get_shortkey('previous_head2'), lambda:goto.previous_item(HEAD2), False)
+        get_shortkey('previous_head2'), lambda:goto.previous_item(HEAD2), True)
     # Next level 3 heading.
     accelerator_active['next_head3'] = win.addAccelerator(
         get_shortkey('next_head3'), lambda:goto.next_item(HEAD3), True)
