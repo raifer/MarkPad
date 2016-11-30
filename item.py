@@ -1,10 +1,10 @@
 # coding:utf-8
 """constants to define item type"""
 
-from sixpad import appdir 
+import os
 
 ## Plugin Path
-PLUGIN_PATH = appdir + '\\plugins\\markpad\\'
+PLUGIN_PATH = os.path.dirname(__file__)
 
 ## itemType
 HEAD = 0
