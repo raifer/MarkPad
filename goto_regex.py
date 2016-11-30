@@ -25,14 +25,22 @@ class Goto():
         while line < sp.window.curPage.lineCount:
             # Fetch text on this line.
             line_text = sp.window.curPage.line(line)
-            # test this line with regex
-            if self.regex_compiled[item_type].match(line_text):
-                # regex found item, go to this line
-                sp.window.curPage.curLine = line
-                # say this line heading 
-                sp.say(line_text, True)
-                return True
-            # end if
+            try :
+                # test this line with regex
+                if self.regex_compiled[item_type].match(line_text):
+                    # regex found item, go to this line
+                    sp.window.curPage.curLine = line
+                    # say this line heading 
+                    sp.say(line_text, True)
+                    return True
+                # end if
+            except KeyError:
+                # The regex is not define for this language.
+                sp.window.warning('This item is not defined to this language, you can append regex item in associated MUL file. Item index : %d' %item_type)
+                return False
+            # End except 
+                                                
+                                
             # increment lines counter 
             line += 1
         # end whil
@@ -56,15 +64,23 @@ class Goto():
         while line >= 0:
             # Fetch text of this line
             line_text = sp.window.curPage.line(line)
-            # test this line with regex
-            if self.regex_compiled[item_type].match(line_text):
-                # regex found item, go to this line
-                sp.window.curPage.curLine = line
+            try :
+                # test this line with regex
+                if self.regex_compiled[item_type].match(line_text):
+                    # regex found item, go to this line
+                    sp.window.curPage.curLine = line
                 
-                # say this line heading 
-                sp.say(line_text, True)
-                return True
-            # end if
+                    # say this line heading 
+                    sp.say(line_text, True)
+                    return True
+                # end if
+            except KeyError:
+                # The regex is not define for this language.
+                sp.window.warning('This item is not defined to this language, you can append regex item in associated MUL file. Item index : %d' %item_type)
+                return False
+            # End except 
+                                                
+            
             # Decrement line number to test previous lin
             line -= 1
         # end whil
