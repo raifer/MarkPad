@@ -27,11 +27,12 @@ class Goto():
             line_text = sp.window.curPage.line(line)
             try :
                 # test this line with regex
-                if self.regex_compiled[item_type].match(line_text):
+                m_result = self.regex_compiled[item_type].search(line_text)
+                if m_result :
                     # regex found item, go to this line
                     sp.window.curPage.curLine = line
-                    # say this line heading 
-                    sp.say(line_text, True)
+                    # say this match result
+                    sp.say(m_result.group(0), True)
                     return True
                 # end if
             except KeyError:
@@ -66,12 +67,13 @@ class Goto():
             line_text = sp.window.curPage.line(line)
             try :
                 # test this line with regex
-                if self.regex_compiled[item_type].match(line_text):
+                m_result = self.regex_compiled[item_type].search(line_text)
+                if m_result :
                     # regex found item, go to this line
                     sp.window.curPage.curLine = line
                 
-                    # say this line heading 
-                    sp.say(line_text, True)
+                    # say this match result
+                    sp.say(m_result.group(0), True)
                     return True
                 # end if
             except KeyError:
