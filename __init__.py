@@ -13,7 +13,7 @@ from .item import *
 from . import tracer
 
 # shortcut programme #
-curPage= sp.window.curPage
+curPage = sp.window.curPage
 
 def get_shortkey(action):
     """get_shortkey(action) -> shorkey, str"""
@@ -83,22 +83,22 @@ def creat_submenu(menu_markup, goto):
     # items in Goto sub menu
     # next head
     items['next_head'] = submenus['goto'].add(
-        label = msg('Next head'), action = lambda: goto.next_item(HEAD), accelerator = get_shortkey('next_head'), name = "next_head")
+        label = msg('Next head'), action = lambda: goto.next_head(HEAD), accelerator = get_shortkey('next_head'), name = "next_head")
     # Previous head
     items['previous_head'] = submenus['goto'].add(
-        label = msg('Previous head'), action = lambda:goto.previous_item(HEAD), accelerator = get_shortkey('previous_head'), name = "previous_head")
+        label = msg('Previous head'), action = lambda:goto.previous_head(HEAD), accelerator = get_shortkey('previous_head'), name = "previous_head")
     # next head 1
     items['next_head1'] = submenus['goto'].add(
-        label = msg('Next level 1 heading'), action = lambda: goto.next_item(HEAD1), accelerator = get_shortkey('next_head1'), name = "next_head1")
+        label = msg('Next level 1 heading'), action = lambda: goto.next_head(HEAD1), accelerator = get_shortkey('next_head1'), name = "next_head1")
     # Previous head 1
     items['previous_head1'] = submenus['goto'].add(
-        label = msg('Previous level 1 heading'), action = lambda:goto.previous_item(HEAD1), accelerator = get_shortkey('previous_head1'), name = "previous_head1")
+        label = msg('Previous level 1 heading'), action = lambda:goto.previous_head(HEAD1), accelerator = get_shortkey('previous_head1'), name = "previous_head1")
     # next link
     items['next_link'] = submenus['goto'].add(
-        label = msg('Next link'), action = lambda: goto.next_item(LINK), accelerator = get_shortkey('next_link'), name = "next_link")
+        label = msg('Next link'), action = lambda: goto.next_link(LINK), accelerator = get_shortkey('next_link'), name = "next_link")
     # Previous link
     items['previous_link'] = submenus['goto'].add(
-        label = msg('Previous link'), action = lambda:goto.previous_item(LINK), accelerator = get_shortkey('previous_link'), name = "previous_link")
+        label = msg('Previous link'), action = lambda:goto.previous_link(LINK), accelerator = get_shortkey('previous_link'), name = "previous_link")
     return submenus, items
 # end def
 
@@ -109,28 +109,28 @@ def creat_accelerator(goto):
     # Goto
     # Next level 2 heading.
     accelerator_active['next_head2'] = win.addAccelerator(
-        get_shortkey('next_head2'), lambda:goto.next_item(HEAD2), True)
+        get_shortkey('next_head2'), lambda:goto.next_head(HEAD2), True)
     # Previous level 2 heading.
     accelerator_active['previous_head2'] = win.addAccelerator(
-        get_shortkey('previous_head2'), lambda:goto.previous_item(HEAD2), True)
+        get_shortkey('previous_head2'), lambda:goto.previous_head(HEAD2), True)
     # Next level 3 heading.
     accelerator_active['next_head3'] = win.addAccelerator(
-        get_shortkey('next_head3'), lambda:goto.next_item(HEAD3), True)
+        get_shortkey('next_head3'), lambda:goto.next_head(HEAD3), True)
     # Previous level 3 heading.
     accelerator_active['previous_head3'] = win.addAccelerator(
-        get_shortkey('previous_head3'), lambda:goto.previous_item(HEAD3), True)
+        get_shortkey('previous_head3'), lambda:goto.previous_head(HEAD3), True)
     # Next level 4 heading.
     accelerator_active['next_head4'] = win.addAccelerator(
-        get_shortkey('next_head4'), lambda:goto.next_item(HEAD4), True)
+        get_shortkey('next_head4'), lambda:goto.next_head(HEAD4), True)
     # Previous level 4 heading.
     accelerator_active['previous_head4'] = win.addAccelerator(
-        get_shortkey('previous_head4'), lambda:goto.previous_item(HEAD4), True)
+        get_shortkey('previous_head4'), lambda:goto.previous_head(HEAD4), True)
     # Next level 5 heading.
     accelerator_active['next_head5'] = win.addAccelerator(
-        get_shortkey('next_head5'), lambda:goto.next_item(HEAD5), True)
+        get_shortkey('next_head5'), lambda:goto.next_head(HEAD5), True)
     # Previous level 5 heading.
     accelerator_active['previous_head5'] = win.addAccelerator(
-        get_shortkey('previous_head5'), lambda:goto.previous_item(HEAD5), True)
+        get_shortkey('previous_head5'), lambda:goto.previous_head(HEAD5), True)
     return accelerator_active
 # end def
 
