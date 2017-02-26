@@ -11,6 +11,7 @@ from sixpad import window as win
 from . import goto_regex
 from .item import *
 from . import tracer
+from . import tree_doc
 
 # shortcut programme #
 curPage = sp.window.curPage
@@ -33,7 +34,8 @@ def get_shortkey(action):
         'next_head5': ['CTRL+(', None],
         'previous_head5': ['CTRL+SHIFT+(', None],
         'next_link': ['CTRL+k', None],
-        'previous_link': ['CTRL+SHIFT+k', None]
+        'previous_link': ['CTRL+SHIFT+k', None],
+        'open_extended_tree': ['CTRL+à', None]
     } # end shortkey dico
     
     value = shortkey[action]
@@ -64,7 +66,7 @@ def load_markpad(page):
     submenus, items = creat_submenu(menu_markup, page.mul.goto)
     # Accelerator
     log('creat accelerators')
-    accelerator_active = creat_accelerator(page.mul.goto)
+    accelerator_active = creat_accelerator(page.mul)
     return menu_markup, submenus, items
 # end def
 
@@ -102,10 +104,16 @@ def creat_submenu(menu_markup, goto):
     return submenus, items
 # end def
 
-def creat_accelerator(goto):
+def creat_accelerator(mul):
     """ Create accelerators from shorkey dico and return accelerator_active"""
     
+    goto = mul.goto
     accelerator_active = {}
+    
+    # Tree
+    accelerator_active['open_extended_tree'] = win.addAccelerator(
+            get_shortkey('open_extended_tree'), tree_doc.TreeDoc(page.mul), True)
+
     # Goto
     # Next level 2 heading.
     accelerator_active['next_head2'] = win.addAccelerator(
