@@ -5,7 +5,7 @@
 
 ## associated Extensions 
 # Note : To use MarkPad and this language with both "File not saved" and file without extension, append the special extension, "noext" .
-extension='markdown', 'md', 'txt'
+extension='markdown', 'md', 'txt', 'noext'
 
 ## Regex section
 # Used to find Markup item
@@ -18,4 +18,4 @@ HEAD2='^## (.+)$'
 HEAD3='^### (.+)$'
 HEAD4='^#### (.+)$'
 HEAD5='^##### (.+)$'
-LINK = '<[^ ]+>|\[.*\(.*\)\]'
+LINK='<[^ ]+>|\[.*\]\(.*\)'
