@@ -221,7 +221,9 @@ class MarkupManager():
                 value = eval(value)
                 # find key type, extension, help or regex
                 if 'extension' in key:
-                    # Value is a list of extension compatible
+                    # Value is a list or one extension compatible
+                    # Convert one extension to a list.
+                    if type(value) == str : value = (value, )
                     log('Extensions declared : ' + str(value)[1:-1])
                     mul.extension = value
                 elif 'help' in key:
