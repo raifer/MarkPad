@@ -1,0 +1,21 @@
+# coding: utf8
+
+# ORG language definition
+# Author : Mathieu Barbe, mat.barbe@gmail.com
+
+## associated Extensions 
+# Note : To use MarkPad and this language with both "File not saved" and file without extension, append the special extension, "noext" .
+extension='org'
+
+## Regex section
+# Used to find Markup item
+# syntax : 
+# NAME_OF_ITEM='regex'
+
+HEAD='^\*+ (.+)$'
+HEAD1='^\* (.+)$'
+HEAD2='^\*\* (.+)$'
+HEAD3='^\*\*\* (.+)$'
+HEAD4='^\*\*\*\* (.+)$'
+HEAD5='^\*\*\*\*\* (.+)$'
+LINK = '<[^ ]+>|\[.*\(.*\)\]'
