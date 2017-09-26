@@ -1,21 +1,21 @@
 # coding: utf8
 
-# MarkDown language definition
-# Author : Mathieu Barbe, mat.barbe@gmail.com
+# My MarkUp language definition
+# Author : Name Surname, mail
 
 ## associated Extensions 
 # Note : To use MarkPad and this language with both "File not saved" and file without extension, append the special extension, "noext" .
-extension='markdown', 'md', 'txt', 'noext'
+extension='ext1', 'ext2', 'noext'
 
 ## Regex section
 # Used to find Markup item
 # syntax : 
 # NAME_OF_ITEM='regex'
 
-HEAD='^#+ (.+)$'
-HEAD1='^# (.+)$'
-HEAD2='^## (.+)$'
-HEAD3='^### (.+)$'
-HEAD4='^#### (.+)$'
-HEAD5='^##### (.+)$'
-LINK='<[^ ]+>|\[.*\]\(.*\)'
+HEAD=''
+HEAD1=''
+HEAD2=''
+HEAD3=''
+HEAD4=''
+HEAD5=''
+LINK=''
